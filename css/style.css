@@ -282,6 +282,10 @@ tr:last-child td { border-bottom: none; }
 .inline-form { display: flex; gap: 8px; }
 .inline-form input { flex: 1; }
 
+.budget-add-form { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+.budget-add-form input { flex: 1; min-width: 140px; }
+.budget-add-form button { flex-shrink: 0; }
+
 .muted { color: var(--muted); font-size: 14px; }
 
 .budget-list { display: flex; flex-direction: column; }

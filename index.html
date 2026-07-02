@@ -49,6 +49,7 @@
 
       <div class="card hidden" id="budgetCard">
         <h2>Ngân sách tháng này</h2>
+        <p class="muted">% chi tiêu so với hạn mức chi tiêu hàng tháng đã đặt cho từng danh mục.</p>
         <div id="budgetProgress"></div>
       </div>
 
@@ -223,18 +224,23 @@
       </div>
 
       <div class="card">
+        <h2>Hạn mức chi tiêu hàng tháng</h2>
+        <p class="muted">Đặt số tiền tối đa dự kiến chi cho từng danh mục. Để trống nếu không muốn giới hạn — Tổng quan sẽ hiện % chi tiêu so với hạn mức và cảnh báo khi bạn chi gần hoặc vượt hạn mức.</p>
+        <div id="budgetList" class="budget-list"></div>
+        <form id="budgetAddForm" class="budget-add-form">
+          <input type="text" id="newBudgetCat" placeholder="Tên khoản mới, VD: Xăng xe..." />
+          <input type="text" id="newBudgetAmount" placeholder="Hạn mức (VNĐ)" />
+          <button type="submit" class="btn btn-primary">Thêm</button>
+        </form>
+      </div>
+
+      <div class="card">
         <h2>Danh mục tiền ra</h2>
         <div id="expenseCatList" class="chip-list"></div>
         <form id="expenseCatForm" class="inline-form">
           <input type="text" id="newExpenseCat" placeholder="Thêm danh mục tiền ra..." />
           <button type="submit" class="btn btn-primary">Thêm</button>
         </form>
-      </div>
-
-      <div class="card">
-        <h2>Hạn mức chi tiêu hàng tháng</h2>
-        <p class="muted">Đặt số tiền tối đa dự kiến chi cho từng danh mục. Để trống nếu không muốn giới hạn — Tổng quan sẽ cảnh báo khi bạn chi gần hoặc vượt hạn mức.</p>
-        <div id="budgetList" class="budget-list"></div>
       </div>
 
       <div class="card">

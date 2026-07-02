@@ -29,6 +29,9 @@ const App = (() => {
     els.budgetList = document.getElementById("budgetList");
     els.budgetCard = document.getElementById("budgetCard");
     els.budgetProgress = document.getElementById("budgetProgress");
+    els.budgetAddForm = document.getElementById("budgetAddForm");
+    els.newBudgetCat = document.getElementById("newBudgetCat");
+    els.newBudgetAmount = document.getElementById("newBudgetAmount");
 
     els.exportBtn = document.getElementById("exportBtn");
     els.importFile = document.getElementById("importFile");
@@ -350,6 +353,32 @@ const App = (() => {
     });
   }
 
+  function addBudgetItem(e) {
+    e.preventDefault();
+    const name = els.newBudgetCat.value.trim();
+    if (!name) return;
+
+    const cats = Store.getCategories();
+    if (!cats.expense.includes(name)) {
+      cats.expense.push(name);
+      Store.setCategories(cats);
+    }
+
+    const amount = parseThousands(els.newBudgetAmount.value);
+    if (amount > 0) {
+      const b = Store.getBudgets();
+      b[name] = amount;
+      Store.setBudgets(b);
+    }
+
+    els.newBudgetCat.value = "";
+    els.newBudgetAmount.value = "";
+    renderCategoryChips();
+    renderBudgetSettings();
+    Finance.refreshCategoryOptions();
+    refreshDashboard();
+  }
+
   function renderBudgetProgress() {
     const budgets = Store.getBudgets();
     const entries = Object.entries(budgets).filter(([, v]) => v > 0);
@@ -429,6 +458,7 @@ const App = (() => {
   function initSettings() {
     renderCategoryChips();
     renderBudgetSettings();
+    attachThousandsInput(els.newBudgetAmount);
 
     els.expenseCatForm.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -438,6 +468,7 @@ const App = (() => {
       e.preventDefault();
       addCategory("income", els.newIncomeCat);
     });
+    els.budgetAddForm.addEventListener("submit", addBudgetItem);
 
     els.exportBtn.addEventListener("click", doExport);
 
