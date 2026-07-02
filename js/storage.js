@@ -59,12 +59,23 @@ const Store = (() => {
     write(KEY_CATS, cats);
   }
 
-  function getBudgets() {
+  // Hạn mức chi tiêu được lưu riêng cho từng tháng: { "2026-07": { "Tiền nhà": 5000000 }, ... }
+  function getAllBudgets() {
     return read(KEY_BUDGETS, {});
   }
 
-  function setBudgets(budgets) {
-    write(KEY_BUDGETS, budgets);
+  function setAllBudgets(all) {
+    write(KEY_BUDGETS, all);
+  }
+
+  function getBudgets(month) {
+    return getAllBudgets()[month] || {};
+  }
+
+  function setBudgets(month, budgets) {
+    const all = getAllBudgets();
+    all[month] = budgets;
+    setAllBudgets(all);
   }
 
   function getMeta() {
@@ -83,7 +94,7 @@ const Store = (() => {
       transactions: getTransactions(),
       tasks: getTasks(),
       categories: getCategories(),
-      budgets: getBudgets(),
+      budgets: getAllBudgets(),
     };
   }
 
@@ -92,7 +103,7 @@ const Store = (() => {
     if (Array.isArray(data.transactions)) setTransactions(data.transactions);
     if (Array.isArray(data.tasks)) setTasks(data.tasks);
     if (data.categories && typeof data.categories === "object") setCategories(data.categories);
-    if (data.budgets && typeof data.budgets === "object") setBudgets(data.budgets);
+    if (data.budgets && typeof data.budgets === "object") setAllBudgets(data.budgets);
   }
 
   function resetAll() {

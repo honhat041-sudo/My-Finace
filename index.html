@@ -224,8 +224,12 @@
       </div>
 
       <div class="card">
-        <h2>Hạn mức chi tiêu hàng tháng</h2>
-        <p class="muted">Đặt số tiền tối đa dự kiến chi cho từng danh mục. Để trống nếu không muốn giới hạn — Tổng quan sẽ hiện % chi tiêu so với hạn mức và cảnh báo khi bạn chi gần hoặc vượt hạn mức.</p>
+        <div class="panel-header">
+          <h2>Hạn mức chi tiêu</h2>
+          <input type="month" id="budgetMonth" />
+        </div>
+        <p class="muted">Mỗi tháng có thể đặt hạn mức riêng theo thói quen chi tiêu tháng đó. Để trống nếu không muốn giới hạn — Tổng quan sẽ hiện % chi tiêu so với hạn mức và cảnh báo khi bạn chi gần hoặc vượt hạn mức.</p>
+        <button type="button" class="btn" id="copyPrevBudgetBtn" style="margin-bottom:12px">📋 Sao chép hạn mức tháng trước</button>
         <div id="budgetList" class="budget-list"></div>
         <form id="budgetAddForm" class="budget-add-form">
           <input type="text" id="newBudgetCat" placeholder="Tên khoản mới, VD: Xăng xe..." />

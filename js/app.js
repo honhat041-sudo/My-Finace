@@ -32,6 +32,8 @@ const App = (() => {
     els.budgetAddForm = document.getElementById("budgetAddForm");
     els.newBudgetCat = document.getElementById("newBudgetCat");
     els.newBudgetAmount = document.getElementById("newBudgetAmount");
+    els.budgetMonth = document.getElementById("budgetMonth");
+    els.copyPrevBudgetBtn = document.getElementById("copyPrevBudgetBtn");
 
     els.exportBtn = document.getElementById("exportBtn");
     els.importFile = document.getElementById("importFile");
@@ -323,10 +325,11 @@ const App = (() => {
     );
   }
 
-  // ---------- Hạn mức chi tiêu ----------
+  // ---------- Hạn mức chi tiêu (theo từng tháng) ----------
   function renderBudgetSettings() {
     const cats = Store.getCategories();
-    const budgets = Store.getBudgets();
+    const month = els.budgetMonth.value || currentMonthValue();
+    const budgets = Store.getBudgets(month);
 
     els.budgetList.innerHTML =
       cats.expense
@@ -343,11 +346,12 @@ const App = (() => {
       attachThousandsInput(input);
       input.addEventListener("change", () => {
         const cat = input.dataset.budgetCat;
-        const b = Store.getBudgets();
+        const m = els.budgetMonth.value || currentMonthValue();
+        const b = Store.getBudgets(m);
         const val = parseThousands(input.value);
         if (val > 0) b[cat] = val;
         else delete b[cat];
-        Store.setBudgets(b);
+        Store.setBudgets(m, b);
         refreshDashboard();
       });
     });
@@ -366,9 +370,10 @@ const App = (() => {
 
     const amount = parseThousands(els.newBudgetAmount.value);
     if (amount > 0) {
-      const b = Store.getBudgets();
+      const month = els.budgetMonth.value || currentMonthValue();
+      const b = Store.getBudgets(month);
       b[name] = amount;
-      Store.setBudgets(b);
+      Store.setBudgets(month, b);
     }
 
     els.newBudgetCat.value = "";
@@ -379,15 +384,28 @@ const App = (() => {
     refreshDashboard();
   }
 
+  function copyPrevMonthBudget() {
+    const month = els.budgetMonth.value || currentMonthValue();
+    const prev = Store.getBudgets(prevMonthKey(month));
+    if (!Object.keys(prev).length) {
+      alert("Tháng trước chưa có hạn mức nào để sao chép.");
+      return;
+    }
+    const current = Store.getBudgets(month);
+    Store.setBudgets(month, { ...prev, ...current });
+    renderBudgetSettings();
+    refreshDashboard();
+  }
+
   function renderBudgetProgress() {
-    const budgets = Store.getBudgets();
+    const month = els.dashboardMonth.value || currentMonthValue();
+    const budgets = Store.getBudgets(month);
     const entries = Object.entries(budgets).filter(([, v]) => v > 0);
     if (!entries.length || dashViewMode === "year") {
       els.budgetCard.classList.add("hidden");
       return;
     }
     els.budgetCard.classList.remove("hidden");
-    const month = els.dashboardMonth.value || currentMonthValue();
 
     const spentByCat = {};
     monthTxs(month)
@@ -456,9 +474,13 @@ const App = (() => {
   }
 
   function initSettings() {
+    els.budgetMonth.value = currentMonthValue();
     renderCategoryChips();
     renderBudgetSettings();
     attachThousandsInput(els.newBudgetAmount);
+
+    els.budgetMonth.addEventListener("change", renderBudgetSettings);
+    els.copyPrevBudgetBtn.addEventListener("click", copyPrevMonthBudget);
 
     els.expenseCatForm.addEventListener("submit", (e) => {
       e.preventDefault();
