@@ -333,6 +333,52 @@ tr:last-child td { border-bottom: none; }
 .legend-item .swatch { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
 .legend-left { display: flex; align-items: center; gap: 8px; color: var(--text); }
 
+/* ---------- Calendar (Công việc) ---------- */
+.cal-nav { display: flex; align-items: center; gap: 4px; }
+.cal-nav .icon-btn { font-size: 18px; font-weight: 700; padding: 6px 10px; }
+.cal-today-btn { padding: 6px 12px; font-size: 12px; }
+
+.cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 6px;
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  font-weight: 600;
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.cal-cell {
+  aspect-ratio: 1 / 1;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: var(--surface-2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  font-size: 12px;
+  color: var(--text);
+  cursor: pointer;
+  padding: 2px;
+}
+
+.cal-cell.outside { background: transparent; color: #3a3a41; cursor: default; }
+.cal-cell.today { border-color: var(--primary); font-weight: 700; }
+.cal-cell.selected { background: var(--primary); color: #fff; }
+.cal-cell.selected .cal-dot { background: #fff !important; }
+
+.cal-dots { display: flex; gap: 2px; }
+.cal-dot { width: 5px; height: 5px; border-radius: 50%; }
+
 /* ---------- Bottom navigation (mobile app style) ---------- */
 .bottom-nav {
   position: fixed;
