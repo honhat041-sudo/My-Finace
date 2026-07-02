@@ -421,7 +421,7 @@ const App = (() => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `quan-ly-ca-nhan-${todayISO()}.json`;
+    a.download = `my-finance-${todayISO()}.json`;
     a.click();
     URL.revokeObjectURL(url);
 

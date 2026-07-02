@@ -86,7 +86,7 @@ const Store = (() => {
 
   function exportAll() {
     return {
-      app: "quan-ly-ca-nhan",
+      app: "my-finance",
       version: 1,
       exportedAt: new Date().toISOString(),
       transactions: getTransactions(),

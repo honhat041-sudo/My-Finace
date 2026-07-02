@@ -1,6 +1,6 @@
 {
-  "name": "Quản Lý Cá Nhân",
-  "short_name": "Quản Lý",
+  "name": "My Finance",
+  "short_name": "My Finance",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0a0a0d",

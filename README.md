@@ -1,4 +1,4 @@
-# 💰 Quản Lý Cá Nhân
+# 💰 My Finance
 
 Ứng dụng web đơn giản giúp quản lý **tài chính cá nhân** và **công việc hàng ngày**. Chạy hoàn toàn trong trình duyệt, không cần server, không cần đăng nhập — toàn bộ dữ liệu được lưu ngay trên máy bạn (`localStorage`).
 
