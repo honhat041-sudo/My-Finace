@@ -20,7 +20,7 @@
 - Danh sách giao dịch gần đây.
 
 ### Quản lý công việc hàng ngày
-- Thêm công việc với hạn chót, độ ưu tiên, ghi chú.
+- Thêm công việc với ngày, độ ưu tiên, ghi chú.
 - Đánh dấu hoàn thành, sửa, xóa.
 - Lọc theo trạng thái (chưa xong / đã xong / tất cả), tự động cảnh báo công việc quá hạn.
 - Thống kê nhanh trên Tổng quan: đang chờ, đến hạn hôm nay, quá hạn, hoàn thành hôm nay.
