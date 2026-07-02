@@ -37,6 +37,13 @@
         </div>
       </div>
 
+      <div id="recurringBanner" class="banner banner-info hidden">
+        <span id="recurringBannerText"></span>
+        <div class="banner-actions">
+          <button type="button" class="btn btn-ghost" id="recurringBannerClose">Đã hiểu</button>
+        </div>
+      </div>
+
       <div id="backupBanner" class="banner hidden">
         <span id="backupBannerText"></span>
         <div class="banner-actions">
@@ -240,6 +247,40 @@
       </div>
 
       <div class="card">
+        <h2>Giao dịch định kỳ</h2>
+        <p class="muted">Khai báo các khoản cố định hàng tháng (tiền nhà, tiết kiệm...). App sẽ tự thêm giao dịch vào đúng ngày mỗi tháng, không cần gõ tay lại.</p>
+        <div id="recurringList" class="task-list" style="margin-bottom:14px"></div>
+        <form id="recurringForm" class="form-grid">
+          <div class="field">
+            <label>Loại</label>
+            <div class="segmented" id="recurringTypeSeg">
+              <button type="button" class="seg-btn active" data-value="expense">Tiền ra</button>
+              <button type="button" class="seg-btn" data-value="income">Tiền vào</button>
+            </div>
+          </div>
+          <div class="field">
+            <label for="recurringCategory">Danh mục</label>
+            <select id="recurringCategory" required></select>
+          </div>
+          <div class="field">
+            <label for="recurringAmount">Số tiền (VNĐ)</label>
+            <input type="number" id="recurringAmount" min="0" step="1000" required placeholder="VD: 5000000" />
+          </div>
+          <div class="field">
+            <label for="recurringDay">Ngày trong tháng</label>
+            <input type="number" id="recurringDay" min="1" max="28" required placeholder="VD: 5" />
+          </div>
+          <div class="field field-wide">
+            <label for="recurringNote">Ghi chú</label>
+            <input type="text" id="recurringNote" placeholder="VD: Tiền thuê nhà tháng..." />
+          </div>
+          <div class="field field-actions">
+            <button type="submit" class="btn btn-primary">Thêm định kỳ</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
         <h2>Dữ liệu</h2>
         <p class="muted">Toàn bộ dữ liệu được lưu ngay trên trình duyệt của bạn (localStorage), không gửi lên bất kỳ máy chủ nào.</p>
         <div class="btn-row">
@@ -277,6 +318,7 @@
 <script src="js/charts.js"></script>
 <script src="js/finance.js"></script>
 <script src="js/tasks.js"></script>
+<script src="js/recurring.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

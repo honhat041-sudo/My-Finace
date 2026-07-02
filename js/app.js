@@ -38,6 +38,10 @@ const App = (() => {
     els.backupBannerText = document.getElementById("backupBannerText");
     els.backupNowBtn = document.getElementById("backupNowBtn");
     els.backupSnoozeBtn = document.getElementById("backupSnoozeBtn");
+
+    els.recurringBanner = document.getElementById("recurringBanner");
+    els.recurringBannerText = document.getElementById("recurringBannerText");
+    els.recurringBannerClose = document.getElementById("recurringBannerClose");
   }
 
   // ---------- Nhắc backup dữ liệu ----------
@@ -390,6 +394,7 @@ const App = (() => {
     Store.setCategories(cats);
     renderCategoryChips();
     Finance.refreshCategoryOptions();
+    Recurring.refreshCategoryOptions();
     if (kind === "expense") renderBudgetSettings();
   }
 
@@ -407,6 +412,7 @@ const App = (() => {
     renderCategoryChips();
     if (kind === "expense") renderBudgetSettings();
     Finance.refreshCategoryOptions();
+    Recurring.refreshCategoryOptions();
   }
 
   function doExport() {
@@ -479,11 +485,22 @@ const App = (() => {
     history.replaceState({}, "", location.pathname);
   }
 
+  function initRecurring() {
+    Recurring.init();
+    const added = Recurring.processDue();
+    if (added.length) {
+      els.recurringBannerText.textContent = `Đã tự động thêm ${added.length} giao dịch định kỳ tháng này: ${added.join(", ")}.`;
+      els.recurringBanner.classList.remove("hidden");
+    }
+    els.recurringBannerClose.addEventListener("click", () => els.recurringBanner.classList.add("hidden"));
+  }
+
   function init() {
     cacheEls();
     initTabs();
     Finance.init();
     Tasks.init();
+    initRecurring();
     initDashboard();
     initSettings();
     initBackupReminder();
