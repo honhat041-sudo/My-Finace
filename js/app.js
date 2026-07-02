@@ -23,6 +23,9 @@ const App = (() => {
     els.incomeCatForm = document.getElementById("incomeCatForm");
     els.newExpenseCat = document.getElementById("newExpenseCat");
     els.newIncomeCat = document.getElementById("newIncomeCat");
+    els.budgetList = document.getElementById("budgetList");
+    els.budgetCard = document.getElementById("budgetCard");
+    els.budgetProgress = document.getElementById("budgetProgress");
 
     els.exportBtn = document.getElementById("exportBtn");
     els.importFile = document.getElementById("importFile");
@@ -231,6 +234,7 @@ const App = (() => {
     renderTrendBar(month);
     renderTaskSummary();
     renderRecentTx();
+    renderBudgetProgress(month);
     checkBackupReminder();
   }
 
@@ -260,6 +264,68 @@ const App = (() => {
     );
   }
 
+  // ---------- Hạn mức chi tiêu ----------
+  function renderBudgetSettings() {
+    const cats = Store.getCategories();
+    const budgets = Store.getBudgets();
+
+    els.budgetList.innerHTML =
+      cats.expense
+        .map(
+          (c) => `
+      <div class="budget-row">
+        <span class="budget-label">${escapeHtml(c)}</span>
+        <input type="number" min="0" step="10000" placeholder="Không giới hạn" data-budget-cat="${escapeHtml(c)}" value="${budgets[c] || ""}" />
+      </div>`
+        )
+        .join("") || '<p class="muted">Chưa có danh mục tiền ra nào.</p>';
+
+    els.budgetList.querySelectorAll("[data-budget-cat]").forEach((input) => {
+      input.addEventListener("change", () => {
+        const cat = input.dataset.budgetCat;
+        const b = Store.getBudgets();
+        const val = Number(input.value);
+        if (val > 0) b[cat] = val;
+        else delete b[cat];
+        Store.setBudgets(b);
+        refreshDashboard();
+      });
+    });
+  }
+
+  function renderBudgetProgress(month) {
+    const budgets = Store.getBudgets();
+    const entries = Object.entries(budgets).filter(([, v]) => v > 0);
+    if (!entries.length) {
+      els.budgetCard.classList.add("hidden");
+      return;
+    }
+    els.budgetCard.classList.remove("hidden");
+
+    const spentByCat = {};
+    monthTxs(month)
+      .filter((t) => t.type === "expense")
+      .forEach((t) => (spentByCat[t.category] = (spentByCat[t.category] || 0) + t.amount));
+
+    els.budgetProgress.innerHTML = entries
+      .map(([cat, budget]) => {
+        const spent = spentByCat[cat] || 0;
+        const pct = Math.round((spent / budget) * 100);
+        const state = pct >= 100 ? "over" : pct >= 70 ? "warn" : "ok";
+        const noteText = state === "over" ? "· Đã vượt hạn mức" : state === "warn" ? "· Sắp đến hạn mức" : "";
+        return `
+        <div class="budget-progress-item">
+          <div class="budget-progress-head">
+            <span class="name">${escapeHtml(cat)}</span>
+            <span class="amounts">${formatVND(spent)} / ${formatVND(budget)}</span>
+          </div>
+          <div class="budget-bar-track"><div class="budget-bar-fill ${state}" style="width:${Math.min(100, pct)}%"></div></div>
+          <div class="budget-pct ${state}">${pct}% ${noteText}</div>
+        </div>`;
+      })
+      .join("");
+  }
+
   function removeCategory(kind, value) {
     if (!confirm(`Xóa danh mục "${value}"? Các giao dịch cũ vẫn giữ nguyên danh mục này.`)) return;
     const cats = Store.getCategories();
@@ -267,6 +333,7 @@ const App = (() => {
     Store.setCategories(cats);
     renderCategoryChips();
     Finance.refreshCategoryOptions();
+    if (kind === "expense") renderBudgetSettings();
   }
 
   function addCategory(kind, input) {
@@ -281,6 +348,7 @@ const App = (() => {
     Store.setCategories(cats);
     input.value = "";
     renderCategoryChips();
+    if (kind === "expense") renderBudgetSettings();
     Finance.refreshCategoryOptions();
   }
 
@@ -302,6 +370,7 @@ const App = (() => {
 
   function initSettings() {
     renderCategoryChips();
+    renderBudgetSettings();
 
     els.expenseCatForm.addEventListener("submit", (e) => {
       e.preventDefault();
