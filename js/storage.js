@@ -125,6 +125,26 @@ function formatVND(amount) {
   return new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND", maximumFractionDigits: 0 }).format(amount || 0);
 }
 
+// Định dạng số nguyên với dấu chấm ngăn cách hàng nghìn, ví dụ 5000000 -> "5.000.000".
+function formatThousands(n) {
+  const num = Number(n);
+  return num ? num.toLocaleString("vi-VN") : "";
+}
+
+// Lấy lại giá trị số nguyên từ chuỗi đã có dấu chấm, ví dụ "5.000.000" -> 5000000.
+function parseThousands(value) {
+  return Number(String(value || "").replace(/[^\d]/g, "")) || 0;
+}
+
+// Gắn vào 1 input (type="text") để tự động chèn dấu chấm ngăn cách hàng nghìn khi gõ.
+function attachThousandsInput(el) {
+  el.setAttribute("inputmode", "numeric");
+  el.addEventListener("input", () => {
+    const digits = el.value.replace(/[^\d]/g, "");
+    el.value = digits ? Number(digits).toLocaleString("vi-VN") : "";
+  });
+}
+
 function formatDate(isoDate) {
   if (!isoDate) return "";
   const [y, m, d] = isoDate.split("-");

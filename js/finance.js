@@ -105,7 +105,7 @@ const Finance = (() => {
       return false;
     }
     if (parsed.type) setType(parsed.type);
-    els.amount.value = parsed.amount;
+    els.amount.value = formatThousands(parsed.amount);
     els.note.value = parsed.note;
     els.date.value = todayISO();
     if (els.parseResult) {
@@ -166,7 +166,7 @@ const Finance = (() => {
       id: editingId || Store.uid(),
       type: currentType(),
       category: els.category.value,
-      amount: Number(els.amount.value) || 0,
+      amount: parseThousands(els.amount.value),
       date: els.date.value || todayISO(),
       note: els.note.value.trim(),
       createdAt: editingId ? list.find((t) => t.id === editingId)?.createdAt || Date.now() : Date.now(),
@@ -191,7 +191,7 @@ const Finance = (() => {
     els.id.value = id;
     setType(tx.type);
     els.category.value = tx.category;
-    els.amount.value = tx.amount;
+    els.amount.value = formatThousands(tx.amount);
     els.date.value = tx.date;
     els.note.value = tx.note || "";
     els.formTitle.textContent = "Sửa giao dịch";
@@ -263,6 +263,7 @@ const Finance = (() => {
     cacheEls();
     els.date.value = todayISO();
     els.filterMonth.value = currentMonthValue();
+    attachThousandsInput(els.amount);
 
     els.typeSeg.querySelectorAll(".seg-btn").forEach((btn) => {
       btn.addEventListener("click", () => setType(btn.dataset.value));

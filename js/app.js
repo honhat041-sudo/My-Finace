@@ -331,16 +331,17 @@ const App = (() => {
           (c) => `
       <div class="budget-row">
         <span class="budget-label">${escapeHtml(c)}</span>
-        <input type="number" min="0" step="10000" placeholder="Không giới hạn" data-budget-cat="${escapeHtml(c)}" value="${budgets[c] || ""}" />
+        <input type="text" placeholder="Không giới hạn" data-budget-cat="${escapeHtml(c)}" value="${formatThousands(budgets[c])}" />
       </div>`
         )
         .join("") || '<p class="muted">Chưa có danh mục tiền ra nào.</p>';
 
     els.budgetList.querySelectorAll("[data-budget-cat]").forEach((input) => {
+      attachThousandsInput(input);
       input.addEventListener("change", () => {
         const cat = input.dataset.budgetCat;
         const b = Store.getBudgets();
-        const val = Number(input.value);
+        const val = parseThousands(input.value);
         if (val > 0) b[cat] = val;
         else delete b[cat];
         Store.setBudgets(b);
