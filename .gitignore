@@ -1,0 +1,8 @@
+.DS_Store
+Thumbs.db
+*.log
+.claude/
+
+# Bộ cài đặt Git for Windows nằm sẵn trong thư mục, không thuộc về dự án
+/Git/
+/Git-2.55.0-64-bit*.exe

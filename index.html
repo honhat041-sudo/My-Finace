@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Quản Lý Cá Nhân</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💰</text></svg>" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div class="app">
+
+  <header class="topbar">
+    <div class="brand">💰 Quản Lý Cá Nhân</div>
+    <nav class="tabs" id="tabs">
+      <button class="tab-btn active" data-tab="dashboard">Tổng quan</button>
+      <button class="tab-btn" data-tab="finance">Thu chi</button>
+      <button class="tab-btn" data-tab="tasks">Công việc</button>
+      <button class="tab-btn" data-tab="settings">Cài đặt</button>
+    </nav>
+  </header>
+
+  <main class="content">
+
+    <!-- ============ DASHBOARD ============ -->
+    <section id="tab-dashboard" class="tab-panel active">
+      <div class="panel-header">
+        <h1>Tổng quan</h1>
+        <input type="month" id="dashboardMonth" />
+      </div>
+
+      <div class="cards-grid" id="summaryCards"></div>
+
+      <div class="charts-grid">
+        <div class="card chart-card">
+          <h2>Chi tiêu theo danh mục</h2>
+          <div id="expensePie" class="chart-wrap"></div>
+        </div>
+        <div class="card chart-card">
+          <h2>Thu / Chi 6 tháng gần nhất</h2>
+          <div id="trendBar" class="chart-wrap"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Công việc hôm nay</h2>
+        <div id="taskSummary" class="task-summary"></div>
+      </div>
+
+      <div class="card">
+        <h2>Giao dịch gần đây</h2>
+        <div id="recentTx" class="table-wrap"></div>
+      </div>
+    </section>
+
+    <!-- ============ FINANCE ============ -->
+    <section id="tab-finance" class="tab-panel">
+      <div class="panel-header">
+        <h1>Thu chi</h1>
+      </div>
+
+      <div class="card">
+        <h2 id="txFormTitle">Thêm giao dịch</h2>
+        <form id="txForm" class="form-grid">
+          <input type="hidden" id="txId" />
+          <div class="field">
+            <label>Loại</label>
+            <div class="segmented" id="txTypeSeg">
+              <button type="button" class="seg-btn active" data-value="income">Tiền vào</button>
+              <button type="button" class="seg-btn" data-value="expense">Tiền ra</button>
+            </div>
+          </div>
+          <div class="field">
+            <label for="txCategory">Danh mục</label>
+            <select id="txCategory" required></select>
+          </div>
+          <div class="field">
+            <label for="txAmount">Số tiền (VNĐ)</label>
+            <input type="number" id="txAmount" min="0" step="1000" required placeholder="VD: 500000" />
+          </div>
+          <div class="field">
+            <label for="txDate">Ngày</label>
+            <input type="date" id="txDate" required />
+          </div>
+          <div class="field field-wide">
+            <label for="txNote">Ghi chú <span class="hint">(nguồn tiền vào / khoản tiêu cụ thể)</span></label>
+            <textarea id="txNote" rows="2" placeholder="VD: Lương công ty ABC tháng 7 / Ăn trưa với đồng nghiệp..."></textarea>
+          </div>
+          <div class="field field-actions">
+            <button type="submit" class="btn btn-primary" id="txSubmitBtn">Thêm giao dịch</button>
+            <button type="button" class="btn btn-ghost hidden" id="txCancelBtn">Hủy sửa</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="panel-header">
+          <h2>Danh sách giao dịch</h2>
+          <div class="filters">
+            <input type="month" id="txFilterMonth" />
+            <select id="txFilterType">
+              <option value="all">Tất cả loại</option>
+              <option value="income">Tiền vào</option>
+              <option value="expense">Tiền ra</option>
+            </select>
+            <select id="txFilterCategory">
+              <option value="all">Tất cả danh mục</option>
+            </select>
+          </div>
+        </div>
+        <div id="txTable" class="table-wrap"></div>
+      </div>
+    </section>
+
+    <!-- ============ TASKS ============ -->
+    <section id="tab-tasks" class="tab-panel">
+      <div class="panel-header">
+        <h1>Công việc</h1>
+      </div>
+
+      <div class="card">
+        <h2 id="taskFormTitle">Thêm công việc</h2>
+        <form id="taskForm" class="form-grid">
+          <input type="hidden" id="taskId" />
+          <div class="field field-wide">
+            <label for="taskTitle">Tên công việc</label>
+            <input type="text" id="taskTitle" required placeholder="VD: Gửi báo cáo tuần" />
+          </div>
+          <div class="field">
+            <label for="taskDue">Hạn chót</label>
+            <input type="date" id="taskDue" />
+          </div>
+          <div class="field">
+            <label for="taskPriority">Độ ưu tiên</label>
+            <select id="taskPriority">
+              <option value="low">Thấp</option>
+              <option value="medium" selected>Trung bình</option>
+              <option value="high">Cao</option>
+            </select>
+          </div>
+          <div class="field field-wide">
+            <label for="taskNote">Ghi chú</label>
+            <textarea id="taskNote" rows="2" placeholder="Chi tiết công việc..."></textarea>
+          </div>
+          <div class="field field-actions">
+            <button type="submit" class="btn btn-primary" id="taskSubmitBtn">Thêm công việc</button>
+            <button type="button" class="btn btn-ghost hidden" id="taskCancelBtn">Hủy sửa</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="panel-header">
+          <h2>Danh sách công việc</h2>
+          <div class="filters">
+            <select id="taskFilterStatus">
+              <option value="pending">Chưa xong</option>
+              <option value="done">Đã xong</option>
+              <option value="all">Tất cả</option>
+            </select>
+          </div>
+        </div>
+        <div id="taskList" class="task-list"></div>
+      </div>
+    </section>
+
+    <!-- ============ SETTINGS ============ -->
+    <section id="tab-settings" class="tab-panel">
+      <div class="panel-header">
+        <h1>Cài đặt</h1>
+      </div>
+
+      <div class="card">
+        <h2>Danh mục tiền ra</h2>
+        <div id="expenseCatList" class="chip-list"></div>
+        <form id="expenseCatForm" class="inline-form">
+          <input type="text" id="newExpenseCat" placeholder="Thêm danh mục tiền ra..." />
+          <button type="submit" class="btn btn-primary">Thêm</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>Danh mục tiền vào</h2>
+        <div id="incomeCatList" class="chip-list"></div>
+        <form id="incomeCatForm" class="inline-form">
+          <input type="text" id="newIncomeCat" placeholder="Thêm danh mục tiền vào..." />
+          <button type="submit" class="btn btn-primary">Thêm</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>Dữ liệu</h2>
+        <p class="muted">Toàn bộ dữ liệu được lưu ngay trên trình duyệt của bạn (localStorage), không gửi lên bất kỳ máy chủ nào.</p>
+        <div class="btn-row">
+          <button class="btn" id="exportBtn">⬇ Xuất dữ liệu (JSON)</button>
+          <label class="btn" for="importFile">⬆ Nhập dữ liệu (JSON)</label>
+          <input type="file" id="importFile" accept="application/json" class="hidden" />
+          <button class="btn btn-danger" id="resetBtn">🗑 Xóa toàn bộ dữ liệu</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="js/storage.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/finance.js"></script>
+<script src="js/tasks.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
