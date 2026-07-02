@@ -84,7 +84,7 @@ Dùng bộ nhận diện chữ trong ảnh có sẵn của Apple (chính xác h�
 1. Mở app **Phím tắt (Shortcuts)** → tab **Của tôi (My Shortcuts)** → **+** để tạo Shortcut mới. Đặt tên, ví dụ **"Đọc thông báo ngân hàng"**.
 2. Thêm hành động **Trích xuất văn bản từ hình ảnh (Extract Text from Image)** — đầu vào để mặc định là **Shortcut Input** (ảnh được chia sẻ vào).
 3. Thêm hành động **Mã hoá URL (URL Encode)**, áp dụng lên văn bản vừa trích xuất ở bước 2.
-4. Thêm hành động **URL**: gõ `https://honhat041-sudo.github.io/My-Finace/index.html?text=` rồi chèn kết quả bước 3 vào ngay sau đó (không có khoảng trắng).
+4. Thêm hành động **URL**: gõ `https://bolobala.netlify.app/index.html?text=` rồi chèn kết quả bước 3 vào ngay sau đó (không có khoảng trắng).
 5. Thêm hành động **Mở URL (Open URLs)**, chọn URL ở bước 4.
 6. Bấm biểu tượng **ⓘ** ở đầu màn hình soạn Shortcut → bật **Hiển thị trong Share Sheet (Show in Share Sheet)** → mục **Loại đầu vào chấp nhận (Accepted Types)** chọn **Hình ảnh (Images)**.
 7. Lưu lại.
@@ -101,14 +101,20 @@ Dùng bộ nhận diện chữ trong ảnh có sẵn của Apple (chính xác h�
 
 Muốn dùng như app thật (toàn màn hình, có icon riêng): mở app trong Safari → nút **Chia sẻ** → **Thêm vào MH chính (Add to Home Screen)**.
 
-## Publish lên GitHub Pages
+## Publish lên Netlify (đang dùng)
 
-Repo: [github.com/honhat041-sudo/My-Finace](https://github.com/honhat041-sudo/My-Finace)
+App đang chạy tại: **https://bolobala.netlify.app**
 
-1. Vào **Settings → Pages** trong repo trên.
-2. Ở mục **Build and deployment → Source**, chọn **Deploy from a branch**.
-3. Chọn nhánh **main**, thư mục **/ (root)**, bấm **Save**.
-4. Sau vài phút, app sẽ có sẵn tại `https://honhat041-sudo.github.io/My-Finace/`.
+Vì dùng Netlify Drop (kéo-thả thủ công), site **không tự cập nhật** khi code thay đổi. Mỗi khi có bản mới, cập nhật lại bằng cách:
+
+1. Vào [app.netlify.com](https://app.netlify.com) → chọn project **bolobala**.
+2. Mở **File Explorer**, vào thư mục dự án, chọn 4 mục: `css`, `js`, `index.html`, `manifest.json` (không chọn cả thư mục gốc).
+3. Kéo-thả 4 mục đó vào ô **"Drag and drop your project folder here to deploy new changes"** trên trang Netlify.
+4. Đợi vài giây, bản mới sẽ tự publish, link giữ nguyên.
+
+## Mã nguồn trên GitHub (lưu trữ, không dùng để host)
+
+Repo: [github.com/honhat041-sudo/My-Finace](https://github.com/honhat041-sudo/My-Finace) — chỉ dùng để lưu lịch sử code, không dùng GitHub Pages để chạy app (đã chuyển hẳn sang Netlify).
 
 ## Giấy phép
 
