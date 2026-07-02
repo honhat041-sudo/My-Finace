@@ -344,7 +344,7 @@ const App = (() => {
 
     els.budgetList.querySelectorAll("[data-budget-cat]").forEach((input) => {
       attachThousandsInput(input);
-      input.addEventListener("change", () => {
+      const saveBudget = () => {
         const cat = input.dataset.budgetCat;
         const m = els.budgetMonth.value || currentMonthValue();
         const b = Store.getBudgets(m);
@@ -352,6 +352,12 @@ const App = (() => {
         if (val > 0) b[cat] = val;
         else delete b[cat];
         Store.setBudgets(m, b);
+      };
+      // Lưu ngay khi gõ (không chỉ khi mất focus) để tránh mất dữ liệu trên Safari di động,
+      // nơi sự kiện "change" đôi khi không kích hoạt đúng lúc chuyển sang ô khác.
+      input.addEventListener("input", saveBudget);
+      input.addEventListener("blur", () => {
+        saveBudget();
         refreshDashboard();
       });
     });
