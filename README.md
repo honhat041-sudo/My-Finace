@@ -14,7 +14,6 @@
   - **Gửi ảnh chụp màn hình:** bấm "📷 Gửi ảnh chụp màn hình", chọn ảnh vừa chụp — app tự đọc chữ trong ảnh ngay trên trình duyệt (dùng [Tesseract.js](https://github.com/naptha/tesseract.js), lần đầu dùng cần mạng để tải bộ nhận diện chữ ~vài MB, sau đó trình duyệt tự nhớ). Không gửi ảnh lên máy chủ nào — xử lý hoàn toàn cục bộ.
   - **Dán text:** dán nguyên văn tin nhắn/thông báo vào ô — app tự tách số tiền và tiền vào/ra.
   - Cả hai cách đều chỉ tự điền sẵn form, bạn luôn chọn danh mục và xác nhận trước khi lưu. Xem thêm mục [Tự động hoá trên iPhone](#tự-động-hoá-trên-iphone-shortcuts) để mở app kèm sẵn nội dung chỉ bằng một chạm khi có tin nhắn ngân hàng đến.
-- **Giao dịch định kỳ:** khai báo khoản cố định hàng tháng (tiền nhà, tiết kiệm...) trong tab Cài đặt — app tự thêm giao dịch đúng ngày mỗi tháng, không trùng lặp, có thể tạm dừng/xoá bất kỳ lúc nào.
 - **Hạn mức chi tiêu:** đặt số tiền tối đa dự kiến cho từng danh mục tiền ra trong tab Cài đặt — Tổng quan sẽ hiện thanh tiến độ và cảnh báo khi chi gần/vượt hạn mức.
 
 ### Báo cáo tổng quan
@@ -69,7 +68,6 @@ HTML, CSS, JavaScript thuần (vanilla) — không cần bước build, không c
     ├── charts.js     # vẽ biểu đồ SVG
     ├── finance.js    # logic thu chi, đọc thông báo ngân hàng (text/ảnh)
     ├── tasks.js       # logic công việc, lịch dạng lưới
-    ├── recurring.js   # giao dịch định kỳ
     └── app.js         # điều phối chung, dashboard, ngân sách, backup
 ```
 

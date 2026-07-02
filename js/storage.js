@@ -4,7 +4,6 @@ const Store = (() => {
   const KEY_TASKS = "pfm.tasks";
   const KEY_CATS = "pfm.categories";
   const KEY_BUDGETS = "pfm.budgets";
-  const KEY_RECURRING = "pfm.recurring";
   const KEY_META = "pfm.meta";
 
   const DEFAULT_CATEGORIES = {
@@ -68,14 +67,6 @@ const Store = (() => {
     write(KEY_BUDGETS, budgets);
   }
 
-  function getRecurring() {
-    return read(KEY_RECURRING, []);
-  }
-
-  function setRecurring(list) {
-    write(KEY_RECURRING, list);
-  }
-
   function getMeta() {
     return read(KEY_META, { lastBackupAt: null, lastBackupPromptAt: null });
   }
@@ -93,7 +84,6 @@ const Store = (() => {
       tasks: getTasks(),
       categories: getCategories(),
       budgets: getBudgets(),
-      recurring: getRecurring(),
     };
   }
 
@@ -103,7 +93,6 @@ const Store = (() => {
     if (Array.isArray(data.tasks)) setTasks(data.tasks);
     if (data.categories && typeof data.categories === "object") setCategories(data.categories);
     if (data.budgets && typeof data.budgets === "object") setBudgets(data.budgets);
-    if (Array.isArray(data.recurring)) setRecurring(data.recurring);
   }
 
   function resetAll() {
@@ -111,7 +100,6 @@ const Store = (() => {
     localStorage.removeItem(KEY_TASKS);
     localStorage.removeItem(KEY_CATS);
     localStorage.removeItem(KEY_BUDGETS);
-    localStorage.removeItem(KEY_RECURRING);
     localStorage.removeItem(KEY_META);
   }
 
@@ -125,8 +113,6 @@ const Store = (() => {
     setCategories,
     getBudgets,
     setBudgets,
-    getRecurring,
-    setRecurring,
     getMeta,
     setMeta,
     exportAll,

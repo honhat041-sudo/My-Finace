@@ -337,22 +337,6 @@ tr:last-child td { border-bottom: none; }
 
 .banner-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .banner-actions .btn { padding: 8px 14px; font-size: 13px; }
-.banner-info { background: rgba(124, 92, 255, 0.1); border-color: rgba(124, 92, 255, 0.35); }
-
-.recurring-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 12px;
-}
-.recurring-item.inactive { opacity: .5; }
-.recurring-main { min-width: 0; }
-.recurring-title { font-weight: 600; font-size: 14px; }
-.recurring-meta { font-size: 12px; color: var(--muted); margin-top: 3px; }
 
 .or-divider { display: flex; align-items: center; gap: 10px; margin: 14px 0; color: var(--muted); font-size: 12px; }
 .or-divider::before, .or-divider::after { content: ""; flex: 1; height: 1px; background: var(--border); }
