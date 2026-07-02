@@ -197,8 +197,13 @@ textarea { resize: vertical; }
   color: var(--muted);
 }
 
+.seg-btn.active { background: var(--primary); color: #fff; }
 .seg-btn.active[data-value="income"] { background: var(--income); color: #06210f; }
 .seg-btn.active[data-value="expense"] { background: var(--expense); color: #2a0705; }
+
+.dash-controls { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.dash-controls .segmented .seg-btn { padding: 8px 12px; font-size: 13px; }
+.dash-controls select#dashboardYear { padding: 9px 10px; }
 
 .btn {
   display: inline-flex;

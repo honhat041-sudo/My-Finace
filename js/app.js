@@ -10,10 +10,13 @@ const App = (() => {
     els.tabs = document.querySelectorAll(".nav-btn");
     els.panels = document.querySelectorAll(".tab-panel");
     els.pageTitle = document.getElementById("pageTitle");
+    els.dashViewSeg = document.getElementById("dashViewSeg");
     els.dashboardMonth = document.getElementById("dashboardMonth");
+    els.dashboardYear = document.getElementById("dashboardYear");
     els.summaryCards = document.getElementById("summaryCards");
     els.expensePie = document.getElementById("expensePie");
     els.trendBar = document.getElementById("trendBar");
+    els.trendTitle = document.getElementById("trendTitle");
     els.taskSummary = document.getElementById("taskSummary");
     els.recentTx = document.getElementById("recentTx");
 
@@ -97,8 +100,14 @@ const App = (() => {
   }
 
   // ---------- Dashboard ----------
+  let dashViewMode = "month";
+
   function monthTxs(month) {
     return Store.getTransactions().filter((t) => t.date && t.date.startsWith(month));
+  }
+
+  function yearTxs(year) {
+    return Store.getTransactions().filter((t) => t.date && t.date.startsWith(String(year)));
   }
 
   function sumByType(list, type) {
@@ -111,21 +120,29 @@ const App = (() => {
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
   }
 
-  function trendBadge(current, previous) {
-    if (!previous) return "";
-    const diff = ((current - previous) / previous) * 100;
-    if (!isFinite(diff) || Math.abs(diff) < 0.05) return `<span class="trend flat">so với tháng trước</span>`;
-    const up = diff > 0;
-    return `<span class="trend ${up ? "up" : "down"}">${up ? "↑" : "↓"} ${Math.abs(diff).toFixed(1)}% so với tháng trước</span>`;
+  function currentPeriod() {
+    if (dashViewMode === "year") {
+      const year = Number(els.dashboardYear.value || new Date().getFullYear());
+      return { list: yearTxs(year), prevList: yearTxs(year - 1), periodLabel: "so với năm trước", year };
+    }
+    const month = els.dashboardMonth.value || currentMonthValue();
+    return { list: monthTxs(month), prevList: monthTxs(prevMonthKey(month)), periodLabel: "so với tháng trước", month };
   }
 
-  function renderSummaryCards(month) {
-    const list = monthTxs(month);
+  function trendBadge(current, previous, periodLabel) {
+    if (!previous) return "";
+    const diff = ((current - previous) / previous) * 100;
+    if (!isFinite(diff) || Math.abs(diff) < 0.05) return `<span class="trend flat">${periodLabel}</span>`;
+    const up = diff > 0;
+    return `<span class="trend ${up ? "up" : "down"}">${up ? "↑" : "↓"} ${Math.abs(diff).toFixed(1)}% ${periodLabel}</span>`;
+  }
+
+  function renderSummaryCards() {
+    const { list, prevList, periodLabel } = currentPeriod();
     const income = sumByType(list, "income");
     const expense = sumByType(list, "expense");
     const balance = income - expense;
 
-    const prevList = monthTxs(prevMonthKey(month));
     const prevIncome = sumByType(prevList, "income");
     const prevExpense = sumByType(prevList, "expense");
 
@@ -138,15 +155,15 @@ const App = (() => {
       <div class="summary-card income">
         <div class="label">Tổng tiền vào</div>
         <div class="value">${formatVND(income)}</div>
-        ${trendBadge(income, prevIncome)}
+        ${trendBadge(income, prevIncome, periodLabel)}
       </div>
       <div class="summary-card expense">
         <div class="label">Tổng tiền ra</div>
         <div class="value">${formatVND(expense)}</div>
-        ${trendBadge(expense, prevExpense)}
+        ${trendBadge(expense, prevExpense, periodLabel)}
       </div>
       <div class="summary-card balance">
-        <div class="label">Số dư trong tháng</div>
+        <div class="label">${dashViewMode === "year" ? "Số dư trong năm" : "Số dư trong tháng"}</div>
         <div class="value ${balance >= 0 ? "positive" : "negative"}">${formatVND(balance)}</div>
       </div>
       <div class="summary-card">
@@ -156,29 +173,45 @@ const App = (() => {
     `;
   }
 
-  function renderExpensePie(month) {
-    const list = monthTxs(month).filter((t) => t.type === "expense");
+  function renderExpensePie() {
+    const { list } = currentPeriod();
     const byCat = {};
-    list.forEach((t) => (byCat[t.category] = (byCat[t.category] || 0) + t.amount));
+    list
+      .filter((t) => t.type === "expense")
+      .forEach((t) => (byCat[t.category] = (byCat[t.category] || 0) + t.amount));
     const items = Object.entries(byCat)
       .map(([label, value]) => ({ label, value }))
       .sort((a, b) => b.value - a.value);
     Charts.renderPie(els.expensePie, items);
   }
 
-  function renderTrendBar(month) {
-    const [y, m] = month.split("-").map(Number);
+  function renderTrendBar() {
     const months = [];
-    for (let i = 5; i >= 0; i--) {
-      const d = new Date(y, m - 1 - i, 1);
-      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
-      const list = monthTxs(key);
-      months.push({
-        label: `${String(d.getMonth() + 1).padStart(2, "0")}/${d.getFullYear()}`,
-        income: sumByType(list, "income"),
-        expense: sumByType(list, "expense"),
-      });
+
+    if (dashViewMode === "year") {
+      const year = Number(els.dashboardYear.value || new Date().getFullYear());
+      for (let m = 1; m <= 12; m++) {
+        const key = `${year}-${String(m).padStart(2, "0")}`;
+        const list = monthTxs(key);
+        months.push({ label: `T${m}`, income: sumByType(list, "income"), expense: sumByType(list, "expense") });
+      }
+      els.trendTitle.textContent = `Thu / Chi 12 tháng năm ${year}`;
+    } else {
+      const month = els.dashboardMonth.value || currentMonthValue();
+      const [y, m] = month.split("-").map(Number);
+      for (let i = 5; i >= 0; i--) {
+        const d = new Date(y, m - 1 - i, 1);
+        const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+        const list = monthTxs(key);
+        months.push({
+          label: `${String(d.getMonth() + 1).padStart(2, "0")}/${d.getFullYear()}`,
+          income: sumByType(list, "income"),
+          expense: sumByType(list, "expense"),
+        });
+      }
+      els.trendTitle.textContent = "Thu / Chi 6 tháng gần nhất";
     }
+
     Charts.renderBar(els.trendBar, months);
   }
 
@@ -228,19 +261,42 @@ const App = (() => {
   }
 
   function refreshDashboard() {
-    const month = els.dashboardMonth.value || currentMonthValue();
-    renderSummaryCards(month);
-    renderExpensePie(month);
-    renderTrendBar(month);
+    renderSummaryCards();
+    renderExpensePie();
+    renderTrendBar();
     renderTaskSummary();
     renderRecentTx();
-    renderBudgetProgress(month);
+    renderBudgetProgress();
     checkBackupReminder();
+  }
+
+  function populateYearSelect() {
+    const txYears = Store.getTransactions()
+      .map((t) => t.date && t.date.slice(0, 4))
+      .filter(Boolean);
+    const currentYear = new Date().getFullYear();
+    const years = new Set([currentYear, ...txYears.map(Number)]);
+    const sorted = [...years].sort((a, b) => b - a);
+    els.dashboardYear.innerHTML = sorted.map((y) => `<option value="${y}">${y}</option>`).join("");
+    els.dashboardYear.value = currentYear;
+  }
+
+  function setDashViewMode(mode) {
+    dashViewMode = mode;
+    els.dashViewSeg.querySelectorAll(".seg-btn").forEach((b) => b.classList.toggle("active", b.dataset.value === mode));
+    els.dashboardMonth.classList.toggle("hidden", mode !== "month");
+    els.dashboardYear.classList.toggle("hidden", mode !== "year");
+    if (mode === "year") populateYearSelect();
+    refreshDashboard();
   }
 
   function initDashboard() {
     els.dashboardMonth.value = currentMonthValue();
     els.dashboardMonth.addEventListener("change", refreshDashboard);
+    els.dashboardYear.addEventListener("change", refreshDashboard);
+    els.dashViewSeg.querySelectorAll(".seg-btn").forEach((btn) => {
+      btn.addEventListener("click", () => setDashViewMode(btn.dataset.value));
+    });
     refreshDashboard();
   }
 
@@ -293,14 +349,15 @@ const App = (() => {
     });
   }
 
-  function renderBudgetProgress(month) {
+  function renderBudgetProgress() {
     const budgets = Store.getBudgets();
     const entries = Object.entries(budgets).filter(([, v]) => v > 0);
-    if (!entries.length) {
+    if (!entries.length || dashViewMode === "year") {
       els.budgetCard.classList.add("hidden");
       return;
     }
     els.budgetCard.classList.remove("hidden");
+    const month = els.dashboardMonth.value || currentMonthValue();
 
     const spentByCat = {};
     monthTxs(month)

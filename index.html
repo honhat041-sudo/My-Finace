@@ -27,7 +27,14 @@
     <section id="tab-dashboard" class="tab-panel active">
       <div class="panel-header">
         <h1>Tổng quan</h1>
-        <input type="month" id="dashboardMonth" />
+        <div class="dash-controls">
+          <div class="segmented" id="dashViewSeg">
+            <button type="button" class="seg-btn active" data-value="month">Tháng</button>
+            <button type="button" class="seg-btn" data-value="year">Năm</button>
+          </div>
+          <input type="month" id="dashboardMonth" />
+          <select id="dashboardYear" class="hidden"></select>
+        </div>
       </div>
 
       <div id="backupBanner" class="banner hidden">
@@ -51,7 +58,7 @@
           <div id="expensePie" class="chart-wrap"></div>
         </div>
         <div class="card chart-card">
-          <h2>Thu / Chi 6 tháng gần nhất</h2>
+          <h2 id="trendTitle">Thu / Chi 6 tháng gần nhất</h2>
           <div id="trendBar" class="chart-wrap"></div>
         </div>
       </div>
