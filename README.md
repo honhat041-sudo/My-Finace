@@ -84,7 +84,7 @@ Dùng bộ nhận diện chữ trong ảnh có sẵn của Apple (chính xác h�
 1. Mở app **Phím tắt (Shortcuts)** → tab **Của tôi (My Shortcuts)** → **+** để tạo Shortcut mới. Đặt tên, ví dụ **"Đọc thông báo ngân hàng"**.
 2. Thêm hành động **Trích xuất văn bản từ hình ảnh (Extract Text from Image)** — đầu vào để mặc định là **Shortcut Input** (ảnh được chia sẻ vào).
 3. Thêm hành động **Mã hoá URL (URL Encode)**, áp dụng lên văn bản vừa trích xuất ở bước 2.
-4. Thêm hành động **URL**: gõ `https://<username>.github.io/<repo>/index.html?text=` rồi chèn kết quả bước 3 vào ngay sau đó (không có khoảng trắng).
+4. Thêm hành động **URL**: gõ `https://honhat041-sudo.github.io/My-Finace/index.html?text=` rồi chèn kết quả bước 3 vào ngay sau đó (không có khoảng trắng).
 5. Thêm hành động **Mở URL (Open URLs)**, chọn URL ở bước 4.
 6. Bấm biểu tượng **ⓘ** ở đầu màn hình soạn Shortcut → bật **Hiển thị trong Share Sheet (Show in Share Sheet)** → mục **Loại đầu vào chấp nhận (Accepted Types)** chọn **Hình ảnh (Images)**.
 7. Lưu lại.
@@ -103,9 +103,12 @@ Muốn dùng như app thật (toàn màn hình, có icon riêng): mở app trong
 
 ## Publish lên GitHub Pages
 
-1. Tạo repo mới trên GitHub, push code lên nhánh `main`.
-2. Vào **Settings → Pages**, chọn nguồn là nhánh `main`, thư mục `/ (root)`.
-3. Sau vài phút, app sẽ có sẵn tại `https://<username>.github.io/<repo>/`.
+Repo: [github.com/honhat041-sudo/My-Finace](https://github.com/honhat041-sudo/My-Finace)
+
+1. Vào **Settings → Pages** trong repo trên.
+2. Ở mục **Build and deployment → Source**, chọn **Deploy from a branch**.
+3. Chọn nhánh **main**, thư mục **/ (root)**, bấm **Save**.
+4. Sau vài phút, app sẽ có sẵn tại `https://honhat041-sudo.github.io/My-Finace/`.
 
 ## Giấy phép
 
