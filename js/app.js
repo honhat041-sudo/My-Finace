@@ -7,8 +7,9 @@ const App = (() => {
   }
 
   function cacheEls() {
-    els.tabs = document.querySelectorAll(".tab-btn");
+    els.tabs = document.querySelectorAll(".nav-btn");
     els.panels = document.querySelectorAll(".tab-panel");
+    els.pageTitle = document.getElementById("pageTitle");
     els.dashboardMonth = document.getElementById("dashboardMonth");
     els.summaryCards = document.getElementById("summaryCards");
     els.expensePie = document.getElementById("expensePie");
@@ -34,6 +35,8 @@ const App = (() => {
       btn.addEventListener("click", () => {
         els.tabs.forEach((b) => b.classList.toggle("active", b === btn));
         els.panels.forEach((p) => p.classList.toggle("active", p.id === `tab-${btn.dataset.tab}`));
+        els.pageTitle.textContent = btn.dataset.title;
+        window.scrollTo({ top: 0, behavior: "instant" });
         if (btn.dataset.tab === "dashboard") refreshDashboard();
       });
     });
@@ -48,11 +51,29 @@ const App = (() => {
     return list.filter((t) => t.type === type).reduce((s, t) => s + t.amount, 0);
   }
 
+  function prevMonthKey(month) {
+    const [y, m] = month.split("-").map(Number);
+    const d = new Date(y, m - 2, 1);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+  }
+
+  function trendBadge(current, previous) {
+    if (!previous) return "";
+    const diff = ((current - previous) / previous) * 100;
+    if (!isFinite(diff) || Math.abs(diff) < 0.05) return `<span class="trend flat">so với tháng trước</span>`;
+    const up = diff > 0;
+    return `<span class="trend ${up ? "up" : "down"}">${up ? "↑" : "↓"} ${Math.abs(diff).toFixed(1)}% so với tháng trước</span>`;
+  }
+
   function renderSummaryCards(month) {
     const list = monthTxs(month);
     const income = sumByType(list, "income");
     const expense = sumByType(list, "expense");
     const balance = income - expense;
+
+    const prevList = monthTxs(prevMonthKey(month));
+    const prevIncome = sumByType(prevList, "income");
+    const prevExpense = sumByType(prevList, "expense");
 
     const savingsAmount = list
       .filter((t) => t.type === "expense" && ["Tiết kiệm", "Đầu tư"].includes(t.category))
@@ -63,10 +84,12 @@ const App = (() => {
       <div class="summary-card income">
         <div class="label">Tổng tiền vào</div>
         <div class="value">${formatVND(income)}</div>
+        ${trendBadge(income, prevIncome)}
       </div>
       <div class="summary-card expense">
         <div class="label">Tổng tiền ra</div>
         <div class="value">${formatVND(expense)}</div>
+        ${trendBadge(expense, prevExpense)}
       </div>
       <div class="summary-card balance">
         <div class="label">Số dư trong tháng</div>
@@ -257,6 +280,20 @@ const App = (() => {
     });
   }
 
+  // Cho phép mở app kèm nội dung tin nhắn ngân hàng qua URL, ví dụ:
+  // index.html?text=<nội dung SMS đã encode> — dùng cho iOS Shortcuts Automation.
+  function handleQuickAdd() {
+    const params = new URLSearchParams(location.search);
+    const text = params.get("text") || params.get("share_text") || params.get("body");
+    if (!text) return;
+
+    const financeBtn = document.querySelector('.nav-btn[data-tab="finance"]');
+    if (financeBtn) financeBtn.click();
+    Finance.applyBankMessage(text);
+
+    history.replaceState({}, "", location.pathname);
+  }
+
   function init() {
     cacheEls();
     initTabs();
@@ -264,6 +301,7 @@ const App = (() => {
     Tasks.init();
     initDashboard();
     initSettings();
+    handleQuickAdd();
   }
 
   return { init, refreshDashboard };

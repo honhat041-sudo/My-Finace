@@ -1,0 +1,9 @@
+{
+  "name": "Quản Lý Cá Nhân",
+  "short_name": "Quản Lý",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0a0a0d",
+  "theme_color": "#0a0a0d",
+  "icons": []
+}

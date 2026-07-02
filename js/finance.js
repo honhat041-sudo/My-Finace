@@ -19,6 +19,59 @@ const Finance = (() => {
     els.filterMonth = document.getElementById("txFilterMonth");
     els.filterType = document.getElementById("txFilterType");
     els.filterCategory = document.getElementById("txFilterCategory");
+    els.pasteText = document.getElementById("bankPasteText");
+    els.parseBtn = document.getElementById("bankParseBtn");
+    els.parseResult = document.getElementById("bankParseResult");
+  }
+
+  // Đọc nội dung tin nhắn/thông báo ngân hàng, tách số tiền và loại giao dịch.
+  // Không chắc chắn 100% do định dạng mỗi ngân hàng khác nhau — luôn để người dùng
+  // xem lại trước khi lưu (đúng theo yêu cầu: app chỉ gợi ý, người dùng vẫn chọn danh mục).
+  function parseBankMessage(raw) {
+    const text = (raw || "").trim();
+    if (!text) return null;
+
+    const amountRegex = /([+\-−])?\s?(\d{1,3}(?:[.,]\d{3})+|\d{4,})\s?(?:vnd|đ\b|d\b)/i;
+    const match = text.match(amountRegex);
+    if (!match) return { amount: null, type: null, note: text };
+
+    const amount = Number(match[2].replace(/[.,]/g, ""));
+    let type = null;
+    if (match[1] === "+") type = "income";
+    else if (match[1] === "-" || match[1] === "−") type = "expense";
+
+    if (!type) {
+      const lower = text.toLowerCase();
+      if (/(ghi có|ghi co|nhận tiền|nhan tien|nạp tiền|nap tien|nhận lương|nhan luong|tiền vào|tien vao)/.test(lower)) {
+        type = "income";
+      } else if (/(ghi nợ|ghi no|thanh toán|thanh toan|rút tiền|rut tien|chuyển đi|chuyen di|tiền ra|tien ra|mua hàng|mua hang)/.test(lower)) {
+        type = "expense";
+      }
+    }
+
+    return { amount, type, note: text.slice(0, 300) };
+  }
+
+  function applyBankMessage(text) {
+    const parsed = parseBankMessage(text);
+    if (!parsed || !parsed.amount) {
+      if (els.parseResult) {
+        els.parseResult.textContent = "Không nhận diện được số tiền trong nội dung này. Hãy kiểm tra lại hoặc nhập tay bên dưới.";
+        els.parseResult.classList.remove("hidden");
+      }
+      return false;
+    }
+    if (parsed.type) setType(parsed.type);
+    els.amount.value = parsed.amount;
+    els.note.value = parsed.note;
+    els.date.value = todayISO();
+    if (els.parseResult) {
+      els.parseResult.textContent = `Đã nhận diện: ${parsed.type === "income" ? "Tiền vào" : parsed.type === "expense" ? "Tiền ra" : "chưa rõ loại"} · ${formatVND(parsed.amount)}. Vui lòng chọn danh mục và kiểm tra lại trước khi lưu.`;
+      els.parseResult.classList.remove("hidden");
+    }
+    els.category.focus();
+    document.getElementById("txFormTitle").scrollIntoView({ behavior: "smooth", block: "start" });
+    return true;
   }
 
   function currentType() {
@@ -182,6 +235,10 @@ const Finance = (() => {
     });
     els.filterCategory.addEventListener("change", renderTable);
 
+    els.parseBtn.addEventListener("click", () => {
+      applyBankMessage(els.pasteText.value);
+    });
+
     refreshCategoryOptions();
     renderTable();
   }
@@ -190,6 +247,7 @@ const Finance = (() => {
     init,
     renderTable,
     refreshCategoryOptions,
+    applyBankMessage,
     getAll: () => Store.getTransactions(),
   };
 })();

@@ -10,6 +10,7 @@
 - Mỗi giao dịch có ô **ghi chú** riêng để mô tả cụ thể nguồn tiền vào / khoản tiêu (VD: "Lương công ty ABC tháng 7", "Ăn trưa với đồng nghiệp"...).
 - Sửa / xóa giao dịch, lọc theo tháng, loại, danh mục.
 - Tự thêm/xóa danh mục theo nhu cầu riêng (tab Cài đặt).
+- **Dán thông báo ngân hàng để tự điền:** dán nguyên văn tin nhắn/thông báo ngân hàng vào ô ở đầu tab "Thu chi", app tự tách số tiền và tiền vào/ra, bạn chỉ cần chọn danh mục rồi lưu. Xem thêm mục [Tự động hoá trên iPhone](#tự-động-hoá-trên-iphone-shortcuts) bên dưới để mở app kèm sẵn nội dung này chỉ bằng một chạm khi có tin nhắn ngân hàng đến.
 
 ### Báo cáo tổng quan
 - Tổng tiền vào / tiền ra / số dư theo tháng.
@@ -60,6 +61,22 @@ HTML, CSS, JavaScript thuần (vanilla) — không dùng framework hay thư vi�
     ├── tasks.js     # logic công việc
     └── app.js        # điều phối chung, dashboard
 ```
+
+## Tự động hoá trên iPhone (Shortcuts)
+
+> **Giới hạn quan trọng:** iOS không cho phép **bất kỳ app nào** — kể cả app ngân hàng chính chủ — âm thầm đọc nội dung thông báo/tin nhắn của app khác. Đây là giới hạn bảo mật của Apple, áp dụng cho mọi nhà phát triển, không phải giới hạn riêng của app này. Cách gần nhất với "tự động" mà iOS cho phép là dùng **Shortcuts Automation**: khi có tin nhắn ngân hàng đến, tự mở app này kèm sẵn nội dung tin nhắn, bạn chỉ cần chạm chọn danh mục rồi lưu.
+
+Sau khi đã publish app lên GitHub Pages (xem mục dưới), thiết lập trên iPhone như sau:
+
+1. Mở app **Phím tắt (Shortcuts)** → tab **Tự động hoá (Automation)** → **+** → **Tạo tự động hoá cá nhân (Create Personal Automation)**.
+2. Chọn trình kích hoạt **Tin nhắn (Message)** → mục **Người gửi (Sender)**, chọn cuộc trò chuyện SMS của ngân hàng (tên hiển thị dạng "Vietcombank", "MBBank"...). Bấm **Tiếp theo**.
+3. Thêm hành động **Mã hoá URL (URL Encode)**, đầu vào để mặc định là biến tin nhắn đến (Shortcut Input).
+4. Thêm hành động **URL**: gõ `https://<username>.github.io/<repo>/index.html?text=` rồi chèn kết quả của bước **Mã hoá URL** vào ngay sau đó (không có khoảng trắng).
+5. Thêm hành động **Mở URL (Open URLs)**, chọn URL vừa tạo ở bước 4.
+6. Ở màn hình xác nhận cuối cùng, tắt **Hỏi trước khi chạy (Ask Before Running)** để tự động hoá chạy ngay không cần chạm xác nhận.
+7. Lưu lại. Từ giờ mỗi khi có SMS từ ngân hàng đó, Safari sẽ tự mở app, tự điền số tiền + loại giao dịch — bạn chỉ cần chọn danh mục và bấm **Thêm giao dịch**.
+
+Muốn dùng như app thật (toàn màn hình, có icon riêng): mở app trong Safari → nút **Chia sẻ** → **Thêm vào MH chính (Add to Home Screen)**.
 
 ## Publish lên GitHub Pages
 

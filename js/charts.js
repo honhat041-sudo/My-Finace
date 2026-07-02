@@ -1,6 +1,6 @@
 // Vẽ biểu đồ đơn giản bằng SVG thuần, không phụ thuộc thư viện ngoài.
 const Charts = (() => {
-  const PALETTE = ["#2f6fed", "#e0563f", "#f4b400", "#1aa876", "#8e44ec", "#00acc1", "#e91e8c", "#795548", "#607d8b", "#c62828"];
+  const PALETTE = ["#7c5cff", "#22c55e", "#f59e0b", "#ef4444", "#06b6d4", "#ec4899", "#a3e635", "#f97316", "#64748b", "#eab308"];
 
   function colorFor(index) {
     return PALETTE[index % PALETTE.length];
@@ -33,7 +33,7 @@ const Charts = (() => {
     bg.setAttribute("cy", cy);
     bg.setAttribute("r", r);
     bg.setAttribute("fill", "none");
-    bg.setAttribute("stroke", "#eef1f6");
+    bg.setAttribute("stroke", "#232329");
     bg.setAttribute("stroke-width", 26);
     svg.appendChild(bg);
 
@@ -109,7 +109,7 @@ const Charts = (() => {
       incRect.setAttribute("width", barW);
       incRect.setAttribute("height", Math.max(incH, 1));
       incRect.setAttribute("rx", 3);
-      incRect.setAttribute("fill", "#1aa876");
+      incRect.setAttribute("fill", "#22c55e");
       svg.appendChild(incRect);
 
       const expRect = document.createElementNS(svgNS, "rect");
@@ -118,7 +118,7 @@ const Charts = (() => {
       expRect.setAttribute("width", barW);
       expRect.setAttribute("height", Math.max(expH, 1));
       expRect.setAttribute("rx", 3);
-      expRect.setAttribute("fill", "#e0563f");
+      expRect.setAttribute("fill", "#ef4444");
       svg.appendChild(expRect);
 
       const label = document.createElementNS(svgNS, "text");
@@ -126,7 +126,7 @@ const Charts = (() => {
       label.setAttribute("y", barAreaH + 28);
       label.setAttribute("text-anchor", "middle");
       label.setAttribute("font-size", "11");
-      label.setAttribute("fill", "#6b7686");
+      label.setAttribute("fill", "#8b8b95");
       label.textContent = m.label;
       svg.appendChild(label);
     });
@@ -140,8 +140,8 @@ const Charts = (() => {
     legend.className = "legend";
     legend.style.marginTop = "8px";
     legend.innerHTML = `
-      <div class="legend-item"><div class="legend-left"><span class="swatch" style="background:#1aa876"></span><span>Tiền vào</span></div></div>
-      <div class="legend-item"><div class="legend-left"><span class="swatch" style="background:#e0563f"></span><span>Tiền ra</span></div></div>
+      <div class="legend-item"><div class="legend-left"><span class="swatch" style="background:#22c55e"></span><span>Tiền vào</span></div></div>
+      <div class="legend-item"><div class="legend-left"><span class="swatch" style="background:#ef4444"></span><span>Tiền ra</span></div></div>
     `;
 
     const outer = document.createElement("div");

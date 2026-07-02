@@ -2,22 +2,23 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#0a0a0d" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Quản Lý" />
 <title>Quản Lý Cá Nhân</title>
+<link rel="manifest" href="manifest.json" />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💰</text></svg>" />
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%230a0a0d%22/><text x=%2250%22 y=%2266%22 font-size=%2255%22 text-anchor=%22middle%22 fill=%22%237c5cff%22 font-family=%22sans-serif%22 font-weight=%22bold%22>Q</text></svg>" />
 <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 <div class="app">
 
   <header class="topbar">
-    <div class="brand">💰 Quản Lý Cá Nhân</div>
-    <nav class="tabs" id="tabs">
-      <button class="tab-btn active" data-tab="dashboard">Tổng quan</button>
-      <button class="tab-btn" data-tab="finance">Thu chi</button>
-      <button class="tab-btn" data-tab="tasks">Công việc</button>
-      <button class="tab-btn" data-tab="settings">Cài đặt</button>
-    </nav>
+    <div class="brand"><span class="brand-mark">Q</span>Quản Lý Cá Nhân</div>
+    <div class="page-title" id="pageTitle">Tổng quan</div>
   </header>
 
   <main class="content">
@@ -57,6 +58,14 @@
     <section id="tab-finance" class="tab-panel">
       <div class="panel-header">
         <h1>Thu chi</h1>
+      </div>
+
+      <div class="card">
+        <h2>📩 Dán thông báo ngân hàng</h2>
+        <p class="muted">Dán nội dung tin nhắn / thông báo ngân hàng vào đây — app sẽ tự tách số tiền và loại giao dịch, bạn chỉ cần chọn danh mục rồi lưu.</p>
+        <textarea id="bankPasteText" rows="3" placeholder="VD: TK 0071xxxx phat sinh giao dich -85,000VND luc 10:23 02/07/2026. So du 12,450,000VND..."></textarea>
+        <div id="bankParseResult" class="parse-result hidden"></div>
+        <button type="button" class="btn btn-primary" id="bankParseBtn" style="margin-top:10px">Phân tích & điền vào form</button>
       </div>
 
       <div class="card">
@@ -201,6 +210,25 @@
     </section>
 
   </main>
+
+  <nav class="bottom-nav" id="tabs">
+    <button class="nav-btn active" data-tab="dashboard" data-title="Tổng quan">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+      <span>Tổng quan</span>
+    </button>
+    <button class="nav-btn" data-tab="finance" data-title="Thu chi">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M2 10h20"/><path d="M16 15h3"/></svg>
+      <span>Thu chi</span>
+    </button>
+    <button class="nav-btn" data-tab="tasks" data-title="Công việc">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2.5"/><path d="M8 12l2.5 2.5L16 9"/></svg>
+      <span>Công việc</span>
+    </button>
+    <button class="nav-btn" data-tab="settings" data-title="Cài đặt">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><circle cx="9" cy="6" r="2"/><line x1="4" y1="12" x2="20" y2="12"/><circle cx="15" cy="12" r="2"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="9" cy="18" r="2"/></svg>
+      <span>Cài đặt</span>
+    </button>
+  </nav>
 </div>
 
 <script src="js/storage.js"></script>
