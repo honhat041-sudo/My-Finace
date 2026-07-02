@@ -6,3 +6,6 @@ Thumbs.db
 # Bộ cài đặt Git for Windows nằm sẵn trong thư mục, không thuộc về dự án
 /Git/
 /Git-2.55.0-64-bit*.exe
+
+# File xuất dữ liệu tải về khi test tính năng "Xuất dữ liệu" ngay trong thư mục dự án
+/quan-ly-ca-nhan-*.json
