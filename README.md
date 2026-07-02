@@ -10,24 +10,33 @@
 - Mỗi giao dịch có ô **ghi chú** riêng để mô tả cụ thể nguồn tiền vào / khoản tiêu (VD: "Lương công ty ABC tháng 7", "Ăn trưa với đồng nghiệp"...).
 - Sửa / xóa giao dịch, lọc theo tháng, loại, danh mục.
 - Tự thêm/xóa danh mục theo nhu cầu riêng (tab Cài đặt).
-- **Dán thông báo ngân hàng để tự điền:** dán nguyên văn tin nhắn/thông báo ngân hàng vào ô ở đầu tab "Thu chi", app tự tách số tiền và tiền vào/ra, bạn chỉ cần chọn danh mục rồi lưu. Xem thêm mục [Tự động hoá trên iPhone](#tự-động-hoá-trên-iphone-shortcuts) bên dưới để mở app kèm sẵn nội dung này chỉ bằng một chạm khi có tin nhắn ngân hàng đến.
+- **Thêm nhanh từ thông báo ngân hàng — 2 cách:**
+  - **Gửi ảnh chụp màn hình:** bấm "📷 Gửi ảnh chụp màn hình", chọn ảnh vừa chụp — app tự đọc chữ trong ảnh ngay trên trình duyệt (dùng [Tesseract.js](https://github.com/naptha/tesseract.js), lần đầu dùng cần mạng để tải bộ nhận diện chữ ~vài MB, sau đó trình duyệt tự nhớ). Không gửi ảnh lên máy chủ nào — xử lý hoàn toàn cục bộ.
+  - **Dán text:** dán nguyên văn tin nhắn/thông báo vào ô — app tự tách số tiền và tiền vào/ra.
+  - Cả hai cách đều chỉ tự điền sẵn form, bạn luôn chọn danh mục và xác nhận trước khi lưu. Xem thêm mục [Tự động hoá trên iPhone](#tự-động-hoá-trên-iphone-shortcuts) để mở app kèm sẵn nội dung chỉ bằng một chạm khi có tin nhắn ngân hàng đến.
+- **Giao dịch định kỳ:** khai báo khoản cố định hàng tháng (tiền nhà, tiết kiệm...) trong tab Cài đặt — app tự thêm giao dịch đúng ngày mỗi tháng, không trùng lặp, có thể tạm dừng/xoá bất kỳ lúc nào.
+- **Hạn mức chi tiêu:** đặt số tiền tối đa dự kiến cho từng danh mục tiền ra trong tab Cài đặt — Tổng quan sẽ hiện thanh tiến độ và cảnh báo khi chi gần/vượt hạn mức.
 
 ### Báo cáo tổng quan
-- Tổng tiền vào / tiền ra / số dư theo tháng.
+- Xem theo **Tháng** hoặc **Năm** (toggle ở đầu trang Tổng quan).
+- Tổng tiền vào / tiền ra / số dư, so sánh % với kỳ trước (tháng trước hoặc năm trước).
 - Tỷ lệ tiết kiệm + đầu tư trên tổng thu nhập.
 - Biểu đồ tròn: chi tiêu theo danh mục.
-- Biểu đồ cột: thu / chi 6 tháng gần nhất.
+- Biểu đồ cột: thu/chi 6 tháng gần nhất (chế độ Tháng) hoặc cả 12 tháng trong năm (chế độ Năm).
+- Ngân sách tháng này: thanh tiến độ theo từng danh mục có đặt hạn mức.
 - Danh sách giao dịch gần đây.
 
 ### Quản lý công việc hàng ngày
 - Thêm công việc với ngày, độ ưu tiên, ghi chú.
 - Đánh dấu hoàn thành, sửa, xóa.
 - Lọc theo trạng thái (chưa xong / đã xong / tất cả), tự động cảnh báo công việc quá hạn.
+- **Lịch dạng lưới** theo tháng (giống Google Calendar) — chấm màu theo độ ưu tiên, bấm vào ngày để lọc công việc theo ngày đó.
 - Thống kê nhanh trên Tổng quan: đang chờ, đến hạn hôm nay, quá hạn, hoàn thành hôm nay.
 
 ### Dữ liệu
-- Lưu cục bộ trong trình duyệt — **riêng tư tuyệt đối, không gửi dữ liệu lên bất kỳ máy chủ nào.**
+- Lưu cục bộ trong trình duyệt — **riêng tư tuyệt đối, không gửi dữ liệu lên bất kỳ máy chủ nào** (kể cả khi dùng tính năng đọc ảnh).
 - Xuất / nhập dữ liệu dạng JSON để sao lưu hoặc chuyển sang máy/trình duyệt khác.
+- App tự nhắc sao lưu định kỳ (7 ngày/lần) nếu phát hiện lâu chưa xuất dữ liệu, tránh mất dữ liệu khi đổi máy hoặc xoá bộ nhớ trình duyệt.
 
 ## Cách chạy
 
@@ -49,17 +58,19 @@ Sau đó mở `http://localhost:5500`.
 
 ## Công nghệ
 
-HTML, CSS, JavaScript thuần (vanilla) — không dùng framework hay thư viện ngoài, không cần bước build.
+HTML, CSS, JavaScript thuần (vanilla) — không cần bước build, không cài đặt gì để chạy. Riêng tính năng đọc chữ trong ảnh tải [Tesseract.js](https://github.com/naptha/tesseract.js) từ CDN khi dùng lần đầu (cần mạng lúc đó), mọi thứ khác hoạt động hoàn toàn ngoại tuyến sau khi tải trang.
 
 ```
 ├── index.html
+├── manifest.json
 ├── css/style.css
 └── js/
-    ├── storage.js   # lớp lưu trữ localStorage
-    ├── charts.js    # vẽ biểu đồ SVG
-    ├── finance.js   # logic thu chi
-    ├── tasks.js     # logic công việc
-    └── app.js        # điều phối chung, dashboard
+    ├── storage.js    # lớp lưu trữ localStorage
+    ├── charts.js     # vẽ biểu đồ SVG
+    ├── finance.js    # logic thu chi, đọc thông báo ngân hàng (text/ảnh)
+    ├── tasks.js       # logic công việc, lịch dạng lưới
+    ├── recurring.js   # giao dịch định kỳ
+    └── app.js         # điều phối chung, dashboard, ngân sách, backup
 ```
 
 ## Tự động hoá trên iPhone (Shortcuts)

@@ -22,6 +22,49 @@ const Finance = (() => {
     els.pasteText = document.getElementById("bankPasteText");
     els.parseBtn = document.getElementById("bankParseBtn");
     els.parseResult = document.getElementById("bankParseResult");
+    els.imageInput = document.getElementById("bankImageInput");
+    els.imageBtn = document.getElementById("bankImageBtn");
+    els.ocrStatus = document.getElementById("bankOcrStatus");
+  }
+
+  const TESSERACT_CDN_URL = "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js";
+  let tesseractLoadPromise = null;
+
+  function loadTesseract() {
+    if (window.Tesseract) return Promise.resolve();
+    if (tesseractLoadPromise) return tesseractLoadPromise;
+    tesseractLoadPromise = new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = TESSERACT_CDN_URL;
+      script.onload = () => resolve();
+      script.onerror = () => {
+        tesseractLoadPromise = null;
+        reject(new Error("Không tải được bộ đọc ảnh. Vui lòng kiểm tra kết nối mạng và thử lại."));
+      };
+      document.head.appendChild(script);
+    });
+    return tesseractLoadPromise;
+  }
+
+  async function handleImageOcr(file) {
+    if (!file) return;
+    els.ocrStatus.classList.remove("hidden");
+    els.ocrStatus.textContent = "Đang tải bộ đọc ảnh (chỉ lần đầu)...";
+    try {
+      await loadTesseract();
+      els.ocrStatus.textContent = "Đang đọc nội dung trong ảnh, vui lòng chờ...";
+      const result = await Tesseract.recognize(file, "eng");
+      const text = (result.data.text || "").trim();
+      if (!text) {
+        els.ocrStatus.textContent = "Không đọc được chữ trong ảnh. Hãy thử ảnh rõ hơn hoặc dán text thủ công bên dưới.";
+        return;
+      }
+      els.pasteText.value = text;
+      els.ocrStatus.textContent = "Đã đọc xong ảnh, đang phân tích...";
+      applyBankMessage(text);
+    } catch (err) {
+      els.ocrStatus.textContent = err.message || "Có lỗi khi đọc ảnh. Vui lòng thử lại hoặc dán text thủ công.";
+    }
   }
 
   // Đọc nội dung tin nhắn/thông báo ngân hàng, tách số tiền và loại giao dịch.
@@ -237,6 +280,13 @@ const Finance = (() => {
 
     els.parseBtn.addEventListener("click", () => {
       applyBankMessage(els.pasteText.value);
+    });
+
+    els.imageBtn.addEventListener("click", () => els.imageInput.click());
+    els.imageInput.addEventListener("change", () => {
+      const file = els.imageInput.files[0];
+      handleImageOcr(file);
+      els.imageInput.value = "";
     });
 
     refreshCategoryOptions();

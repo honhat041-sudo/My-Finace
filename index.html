@@ -88,8 +88,15 @@
       </div>
 
       <div class="card">
-        <h2>📩 Dán thông báo ngân hàng</h2>
-        <p class="muted">Dán nội dung tin nhắn / thông báo ngân hàng vào đây — app sẽ tự tách số tiền và loại giao dịch, bạn chỉ cần chọn danh mục rồi lưu.</p>
+        <h2>📩 Thêm nhanh từ thông báo ngân hàng</h2>
+        <p class="muted">Chọn 1 trong 2 cách: gửi ảnh chụp màn hình để app tự đọc chữ, hoặc dán nội dung tin nhắn vào ô bên dưới.</p>
+
+        <input type="file" id="bankImageInput" accept="image/*" class="hidden" />
+        <button type="button" class="btn" id="bankImageBtn">📷 Gửi ảnh chụp màn hình</button>
+        <div id="bankOcrStatus" class="parse-result hidden"></div>
+
+        <div class="or-divider"><span>hoặc dán text</span></div>
+
         <textarea id="bankPasteText" rows="3" placeholder="VD: TK 0071xxxx phat sinh giao dich -85,000VND luc 10:23 02/07/2026. So du 12,450,000VND..."></textarea>
         <div id="bankParseResult" class="parse-result hidden"></div>
         <button type="button" class="btn btn-primary" id="bankParseBtn" style="margin-top:10px">Phân tích & điền vào form</button>
