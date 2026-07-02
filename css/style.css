@@ -279,6 +279,21 @@ tr:last-child td { border-bottom: none; }
 
 .muted { color: var(--muted); font-size: 14px; }
 
+.banner {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 13.5px;
+}
+
+.banner-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.banner-actions .btn { padding: 8px 14px; font-size: 13px; }
+
 .parse-result {
   margin-top: 10px;
   padding: 10px 12px;

@@ -27,6 +27,57 @@ const App = (() => {
     els.exportBtn = document.getElementById("exportBtn");
     els.importFile = document.getElementById("importFile");
     els.resetBtn = document.getElementById("resetBtn");
+
+    els.backupBanner = document.getElementById("backupBanner");
+    els.backupBannerText = document.getElementById("backupBannerText");
+    els.backupNowBtn = document.getElementById("backupNowBtn");
+    els.backupSnoozeBtn = document.getElementById("backupSnoozeBtn");
+  }
+
+  // ---------- Nhắc backup dữ liệu ----------
+  const BACKUP_REMIND_DAYS = 7;
+  const BACKUP_SNOOZE_DAYS = 3;
+  const DAY_MS = 24 * 60 * 60 * 1000;
+
+  function checkBackupReminder() {
+    const hasData = Store.getTransactions().length > 0 || Store.getTasks().length > 0;
+    if (!hasData) {
+      els.backupBanner.classList.add("hidden");
+      return;
+    }
+
+    const meta = Store.getMeta();
+    const now = Date.now();
+
+    if (meta.lastBackupPromptAt && now - meta.lastBackupPromptAt < BACKUP_SNOOZE_DAYS * DAY_MS) {
+      els.backupBanner.classList.add("hidden");
+      return;
+    }
+
+    if (!meta.lastBackupAt) {
+      els.backupBannerText.textContent = "Bạn chưa từng sao lưu dữ liệu. Nên xuất dữ liệu để tránh mất mát nếu đổi máy hoặc xóa bộ nhớ trình duyệt.";
+      els.backupBanner.classList.remove("hidden");
+      return;
+    }
+
+    const daysSince = Math.floor((now - meta.lastBackupAt) / DAY_MS);
+    if (daysSince >= BACKUP_REMIND_DAYS) {
+      els.backupBannerText.textContent = `Đã ${daysSince} ngày bạn chưa sao lưu dữ liệu gần đây.`;
+      els.backupBanner.classList.remove("hidden");
+    } else {
+      els.backupBanner.classList.add("hidden");
+    }
+  }
+
+  function initBackupReminder() {
+    els.backupNowBtn.addEventListener("click", doExport);
+    els.backupSnoozeBtn.addEventListener("click", () => {
+      const meta = Store.getMeta();
+      meta.lastBackupPromptAt = Date.now();
+      Store.setMeta(meta);
+      els.backupBanner.classList.add("hidden");
+    });
+    checkBackupReminder();
   }
 
   // ---------- Tabs ----------
@@ -180,6 +231,7 @@ const App = (() => {
     renderTrendBar(month);
     renderTaskSummary();
     renderRecentTx();
+    checkBackupReminder();
   }
 
   function initDashboard() {
@@ -232,6 +284,22 @@ const App = (() => {
     Finance.refreshCategoryOptions();
   }
 
+  function doExport() {
+    const data = Store.exportAll();
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `quan-ly-ca-nhan-${todayISO()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    const meta = Store.getMeta();
+    meta.lastBackupAt = Date.now();
+    Store.setMeta(meta);
+    checkBackupReminder();
+  }
+
   function initSettings() {
     renderCategoryChips();
 
@@ -244,16 +312,7 @@ const App = (() => {
       addCategory("income", els.newIncomeCat);
     });
 
-    els.exportBtn.addEventListener("click", () => {
-      const data = Store.exportAll();
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `quan-ly-ca-nhan-${todayISO()}.json`;
-      a.click();
-      URL.revokeObjectURL(url);
-    });
+    els.exportBtn.addEventListener("click", doExport);
 
     els.importFile.addEventListener("change", () => {
       const file = els.importFile.files[0];
@@ -301,6 +360,7 @@ const App = (() => {
     Tasks.init();
     initDashboard();
     initSettings();
+    initBackupReminder();
     handleQuickAdd();
   }
 

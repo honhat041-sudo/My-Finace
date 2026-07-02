@@ -1,0 +1,74 @@
+{
+  "app": "quan-ly-ca-nhan",
+  "version": 1,
+  "exportedAt": "2026-07-02T14:12:15.074Z",
+  "transactions": [
+    {
+      "id": "mr3j90vdxileu0",
+      "type": "income",
+      "category": "Lương",
+      "amount": 15000000,
+      "date": "2026-07-02",
+      "note": "Lương công ty ABC tháng 7",
+      "createdAt": 1782998465449
+    },
+    {
+      "id": "mr3j984iyx646a",
+      "type": "expense",
+      "category": "Tiền nhà",
+      "amount": 5000000,
+      "date": "2026-07-02",
+      "note": "Tiền thuê nhà tháng 7",
+      "createdAt": 1782998474850
+    }
+  ],
+  "tasks": [
+    {
+      "id": "mr3j9l6o7dcmun",
+      "title": "Gửi báo cáo chi tiêu tuần",
+      "dueDate": "2026-07-02",
+      "priority": "medium",
+      "note": "",
+      "status": "pending",
+      "createdAt": 1782998491776,
+      "doneAt": null
+    },
+    {
+      "id": "mr3kst9u73nx61",
+      "title": "đi đà nẵng",
+      "dueDate": "2026-07-23",
+      "priority": "medium",
+      "note": "",
+      "status": "pending",
+      "createdAt": 1783001068338,
+      "doneAt": null
+    },
+    {
+      "id": "mr3kt9zdb1g689",
+      "title": "kasndasnld",
+      "dueDate": "2026-07-03",
+      "priority": "medium",
+      "note": "",
+      "status": "pending",
+      "createdAt": 1783001089993,
+      "doneAt": null
+    }
+  ],
+  "categories": {
+    "income": [
+      "Lương",
+      "Thưởng",
+      "Thu nhập khác"
+    ],
+    "expense": [
+      "Tiền nhà",
+      "Tiền ăn uống",
+      "Tiết kiệm",
+      "Đầu tư",
+      "Ăn ngoài",
+      "Chi phí linh tinh khác"
+    ]
+  },
+  "budgets": {},
+  "recurring": []
+}

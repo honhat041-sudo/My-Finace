@@ -3,6 +3,9 @@ const Store = (() => {
   const KEY_TX = "pfm.transactions";
   const KEY_TASKS = "pfm.tasks";
   const KEY_CATS = "pfm.categories";
+  const KEY_BUDGETS = "pfm.budgets";
+  const KEY_RECURRING = "pfm.recurring";
+  const KEY_META = "pfm.meta";
 
   const DEFAULT_CATEGORIES = {
     income: ["Lương", "Thưởng", "Thu nhập khác"],
@@ -57,6 +60,30 @@ const Store = (() => {
     write(KEY_CATS, cats);
   }
 
+  function getBudgets() {
+    return read(KEY_BUDGETS, {});
+  }
+
+  function setBudgets(budgets) {
+    write(KEY_BUDGETS, budgets);
+  }
+
+  function getRecurring() {
+    return read(KEY_RECURRING, []);
+  }
+
+  function setRecurring(list) {
+    write(KEY_RECURRING, list);
+  }
+
+  function getMeta() {
+    return read(KEY_META, { lastBackupAt: null, lastBackupPromptAt: null });
+  }
+
+  function setMeta(meta) {
+    write(KEY_META, meta);
+  }
+
   function exportAll() {
     return {
       app: "quan-ly-ca-nhan",
@@ -65,6 +92,8 @@ const Store = (() => {
       transactions: getTransactions(),
       tasks: getTasks(),
       categories: getCategories(),
+      budgets: getBudgets(),
+      recurring: getRecurring(),
     };
   }
 
@@ -73,12 +102,17 @@ const Store = (() => {
     if (Array.isArray(data.transactions)) setTransactions(data.transactions);
     if (Array.isArray(data.tasks)) setTasks(data.tasks);
     if (data.categories && typeof data.categories === "object") setCategories(data.categories);
+    if (data.budgets && typeof data.budgets === "object") setBudgets(data.budgets);
+    if (Array.isArray(data.recurring)) setRecurring(data.recurring);
   }
 
   function resetAll() {
     localStorage.removeItem(KEY_TX);
     localStorage.removeItem(KEY_TASKS);
     localStorage.removeItem(KEY_CATS);
+    localStorage.removeItem(KEY_BUDGETS);
+    localStorage.removeItem(KEY_RECURRING);
+    localStorage.removeItem(KEY_META);
   }
 
   return {
@@ -89,6 +123,12 @@ const Store = (() => {
     setTasks,
     getCategories,
     setCategories,
+    getBudgets,
+    setBudgets,
+    getRecurring,
+    setRecurring,
+    getMeta,
+    setMeta,
     exportAll,
     importAll,
     resetAll,
