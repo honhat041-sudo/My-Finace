@@ -64,17 +64,31 @@ HTML, CSS, JavaScript thuần (vanilla) — không dùng framework hay thư vi�
 
 ## Tự động hoá trên iPhone (Shortcuts)
 
-> **Giới hạn quan trọng:** iOS không cho phép **bất kỳ app nào** — kể cả app ngân hàng chính chủ — âm thầm đọc nội dung thông báo/tin nhắn của app khác. Đây là giới hạn bảo mật của Apple, áp dụng cho mọi nhà phát triển, không phải giới hạn riêng của app này. Cách gần nhất với "tự động" mà iOS cho phép là dùng **Shortcuts Automation**: khi có tin nhắn ngân hàng đến, tự mở app này kèm sẵn nội dung tin nhắn, bạn chỉ cần chạm chọn danh mục rồi lưu.
+> **Giới hạn quan trọng:** iOS không cho phép **bất kỳ app nào** — kể cả app ngân hàng chính chủ — âm thầm đọc nội dung thông báo/tin nhắn của app khác. Đây là giới hạn bảo mật của Apple, áp dụng cho mọi nhà phát triển, không phải giới hạn riêng của app này. Cách gần nhất với "tự động" mà iOS cho phép là dùng **Shortcuts**: chụp màn hình thông báo (hoặc nhận SMS) → tự mở app này kèm sẵn nội dung đã đọc được, bạn chỉ cần chạm chọn danh mục rồi lưu.
 
-Sau khi đã publish app lên GitHub Pages (xem mục dưới), thiết lập trên iPhone như sau:
+Cả hai cách bên dưới đều dùng chung cơ chế: app đọc tham số `?text=...` trên URL để tự điền số tiền/loại giao dịch — không cần sửa gì thêm trong app.
+
+### Cách A — Chụp màn hình rồi gửi (khuyến nghị, nhanh nhất)
+
+Dùng bộ nhận diện chữ trong ảnh có sẵn của Apple (chính xác hơn, không cần tải gì thêm). Thiết lập một lần:
+
+1. Mở app **Phím tắt (Shortcuts)** → tab **Của tôi (My Shortcuts)** → **+** để tạo Shortcut mới. Đặt tên, ví dụ **"Đọc thông báo ngân hàng"**.
+2. Thêm hành động **Trích xuất văn bản từ hình ảnh (Extract Text from Image)** — đầu vào để mặc định là **Shortcut Input** (ảnh được chia sẻ vào).
+3. Thêm hành động **Mã hoá URL (URL Encode)**, áp dụng lên văn bản vừa trích xuất ở bước 2.
+4. Thêm hành động **URL**: gõ `https://<username>.github.io/<repo>/index.html?text=` rồi chèn kết quả bước 3 vào ngay sau đó (không có khoảng trắng).
+5. Thêm hành động **Mở URL (Open URLs)**, chọn URL ở bước 4.
+6. Bấm biểu tượng **ⓘ** ở đầu màn hình soạn Shortcut → bật **Hiển thị trong Share Sheet (Show in Share Sheet)** → mục **Loại đầu vào chấp nhận (Accepted Types)** chọn **Hình ảnh (Images)**.
+7. Lưu lại.
+
+**Cách dùng hằng ngày:** chụp màn hình thông báo ngân hàng như bình thường → chạm vào ảnh thu nhỏ ở góc màn hình → **Chia sẻ** → chọn **"Đọc thông báo ngân hàng"** → Safari tự mở app, đã điền sẵn số tiền + loại giao dịch → bạn chỉ cần chọn danh mục và bấm **Thêm giao dịch**.
+
+### Cách B — Tự động khi có SMS đến (không cần chạm vào ảnh, nhưng kém linh hoạt hơn nếu ngân hàng báo qua thông báo app thay vì SMS)
 
 1. Mở app **Phím tắt (Shortcuts)** → tab **Tự động hoá (Automation)** → **+** → **Tạo tự động hoá cá nhân (Create Personal Automation)**.
 2. Chọn trình kích hoạt **Tin nhắn (Message)** → mục **Người gửi (Sender)**, chọn cuộc trò chuyện SMS của ngân hàng (tên hiển thị dạng "Vietcombank", "MBBank"...). Bấm **Tiếp theo**.
-3. Thêm hành động **Mã hoá URL (URL Encode)**, đầu vào để mặc định là biến tin nhắn đến (Shortcut Input).
-4. Thêm hành động **URL**: gõ `https://<username>.github.io/<repo>/index.html?text=` rồi chèn kết quả của bước **Mã hoá URL** vào ngay sau đó (không có khoảng trắng).
-5. Thêm hành động **Mở URL (Open URLs)**, chọn URL vừa tạo ở bước 4.
-6. Ở màn hình xác nhận cuối cùng, tắt **Hỏi trước khi chạy (Ask Before Running)** để tự động hoá chạy ngay không cần chạm xác nhận.
-7. Lưu lại. Từ giờ mỗi khi có SMS từ ngân hàng đó, Safari sẽ tự mở app, tự điền số tiền + loại giao dịch — bạn chỉ cần chọn danh mục và bấm **Thêm giao dịch**.
+3. Lặp lại bước 3-5 của Cách A, nhưng đầu vào của **Mã hoá URL** là biến tin nhắn đến (Shortcut Input) thay vì văn bản trích xuất từ ảnh.
+4. Ở màn hình xác nhận cuối cùng, tắt **Hỏi trước khi chạy (Ask Before Running)** để tự động hoá chạy ngay không cần chạm xác nhận.
+5. Lưu lại. Từ giờ mỗi khi có SMS từ ngân hàng đó, Safari sẽ tự mở app, tự điền sẵn thông tin.
 
 Muốn dùng như app thật (toàn màn hình, có icon riêng): mở app trong Safari → nút **Chia sẻ** → **Thêm vào MH chính (Add to Home Screen)**.
 
